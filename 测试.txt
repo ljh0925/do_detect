@@ -1,0 +1,253 @@
+//  time.century = 0x20;
+//  time.year = 0x13;
+//  time.month = 0x04;
+//  time.day = 0x14;
+//  time.hour = 0x12;
+//  time.minute = 0x17;
+//  time.second = 0x30;
+//  (void)Modify_Time(&time);
+
+//  Beep(200);
+//  SleepMs2(200);
+//  Beep(200);
+//
+//  lcddisp(0, 0, "0 主安全模块错误");
+//  lcddisp(1, 0, "1 主安全模块错误");
+//  lcddisp(2, 0, "2 主安全模块错误");
+//  lcddisp(3, 0, "3 主安全模块错误");
+
+
+//  i = Rc531Chk();
+//  if ( i == ok)
+//  {
+//  	SleepMs2(200);
+//  	Beep(200);
+//  }
+
+//  for( x=0; x<250000; x++)
+//  {
+//  	testsram[x] = x;
+//  }
+
+
+//  if ( testsram[100] == 100)
+//  {
+//  	SleepMs2(200);
+//  	Beep(200);
+//  }
+
+//  for( x=0; x<500000; x++)
+//  {
+//  	testsram2[x] = (INT8U)x;
+//  }
+//
+//  if ( testsram2[100] == 100)
+//  {
+//  	SleepMs2(200);
+//  	Beep(200);
+//  }
+//
+
+//  //打开发送中断
+//   USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
+
+
+//    for(;;)
+//    {
+////  	uart1_putch('1');
+////  	uart1_write("123456789abcdef", 16);
+////  	i = com1_gets(buf, &rcv_len, 10000, 10);
+////  	if (i == ok)
+////  	{
+////  		Beep(200);
+////  	}
+//
+//        uart2_write("123456789abcdef", 16);
+//        i = com2_gets(buf, &rcv_len, 10000, 10);
+//        if (i == ok)
+//        {
+//            Beep(200);
+//        }
+//
+//        SleepMs2(1000);
+//        (void)Get_Time(&time);
+//    }
+
+
+//  w25q_erase_chip();
+
+//  Beep(500);
+
+//    for(x=0; x<4096; x++)
+//    {
+//        fbuf[x] = (INT8U)x;
+//    }
+////  w25q_write_page(fbuf, 0, 256);
+//    w25q_write(fbuf, 0, 4096);
+//  memset(fbuf, 0xFF, sizeof(fbuf));
+//  w25q_read(fbuf, 0, 4096);
+
+
+
+///////////////////////////UCOSII任务堆栈设置///////////////////////////////////
+////START 任务
+////设置任务优先级
+//#define START_TASK_PRIO      			10 //开始任务的优先级设置为最低
+////设置任务堆栈大小
+//#define START_STK_SIZE  				64
+////创建任务堆栈空间
+//OS_STK START_TASK_STK[START_STK_SIZE];
+////任务函数接口
+//void start_task(void *pdata);
+//
+//LED1任务
+//设置任务优先级
+#define LED1_TASK_PRIO       			7
+//设置任务堆栈大小
+#define LED1_STK_SIZE  		    		64
+//创建任务堆栈空间
+OS_STK LED1_TASK_STK[LED1_STK_SIZE];
+//任务函数接口
+void led1_task(void *pdata);
+
+
+//LED2任务
+//设置任务优先级
+#define LED2_TASK_PRIO       			6
+//设置任务堆栈大小
+#define LED2_STK_SIZE  					64
+//创建任务堆栈空间
+OS_STK LED2_TASK_STK[LED2_STK_SIZE];
+//任务函数接口
+void led2_task(void *pdata);
+
+
+//LED1任务
+void led1_task(void *pdata)
+{
+	while ( 1 )
+	{
+		GPIO_ResetBits(GPIOG,GPIO_Pin_8);                           //PG.8 GREEN输出高
+//  	delay_ms(80);
+		SleepMs2(80);
+		GPIO_SetBits(GPIOG,GPIO_Pin_8);                         //PG.8 GREEN输出高
+//  	delay_ms(920);
+		SleepMs2(920);
+	};
+}
+
+//LED2任务
+void led2_task(void *pdata)
+{
+	while ( 1 )
+	{
+		GPIO_SetBits(GPIOG, GPIO_Pin_7);                            //PG.7 RED输出高
+//  	delay_ms(300);
+		SleepMs2(300);
+		GPIO_ResetBits(GPIOG, GPIO_Pin_7);                          //PG.7 RED输出低
+//  	delay_ms(300);
+		SleepMs2(300);
+	};
+}
+
+
+//  OSTaskCreate(led1_task, (void *)0, (OS_STK *)&LED1_TASK_STK[LED1_STK_SIZE - 1], LED1_TASK_PRIO);
+//  OSTaskCreate(led2_task, (void *)0, (OS_STK *)&LED2_TASK_STK[LED2_STK_SIZE - 1], LED2_TASK_PRIO);
+
+//    /* 配置STM32的I2S音频接口(比如飞利浦标准I2S接口，16bit， 44K采样率), 开始放音*/
+////  I2S_Mode_Config(I2S_Standard_Phillips, I2S_DataFormat_16b, I2S_AudioFreq_44k, I2S_Mode_MasterTx);
+//    I2S_Mode_Config(I2S_Standard_MSB, I2S_DataFormat_16b, I2S_AudioFreq_44k, I2S_Mode_MasterTx);
+////  I2S_Mode_Config(I2S_Standard_LSB, I2S_DataFormat_16b, I2S_AudioFreq_44k, I2S_Mode_MasterTx);
+////  I2S_Mode_Config(I2S_Standard_PCMShort, I2S_DataFormat_16b, I2S_AudioFreq_44k, I2S_Mode_MasterTx);
+////  I2S_Mode_Config(I2S_Standard_PCMLong, I2S_DataFormat_16b, I2S_AudioFreq_44k, I2S_Mode_MasterTx);
+//
+//
+//    for(;;)
+//    {
+//        for (i = 0; i < fileinfo.fsize - 44; i++)
+//        {
+//            i2s2_send(g_pwav[i]);
+//        }
+//    }
+
+	//  for(;;)
+	//  {
+	//  	for( i=0; i<(fileinfo.fsize - 44) / 2; i++)
+	//  	{
+	//  		i2s2_send(pwav[i * 2]);
+	//  		i2s2_send(pwav[i * 2 + 1]);
+	//  		i2s2_send(pwav[i * 2]);
+	//  		i2s2_send(pwav[i * 2 + 1]);
+	//  	}
+	//  }
+
+//  usData = g_tRec.pAudio[g_tRec.uiCursor];        /* 读取音频数据 */
+//  if (SPI_I2S_GetFlagStatus(SPI2, I2S_FLAG_CHSIDE) != SET)    /* 判断是不是左声道 */
+//  {
+//  	if (++g_tRec.uiCursor >= EXT_SRAM_SIZE / 2)
+//  	{
+//  		g_tRec.uiCursor = EXT_SRAM_SIZE / 2;
+//  		/* 禁止I2S2 RXNE中断(接收不空)，需要时再打开 */
+//  		SPI_I2S_ITConfig(SPI2, SPI_I2S_IT_RXNE, DISABLE);
+//  		/* 禁止I2S2 TXE中断(发送缓冲区空)，需要时再打开 */
+//  		SPI_I2S_ITConfig(SPI2, SPI_I2S_IT_TXE, DISABLE);
+//  		bsp_PutKey(KEY_DOWN_JOY_OK);    /* 模拟停止键按下 */
+//  	}
+//  }
+//  SPI_I2S_SendData(SPI2, usData);
+
+//  test_sound();
+
+
+//  exf_getfree("0", &total, &free);
+//  mf_scan_files("0:");
+//  f_opendir(&dir, "0:");
+//  res = f_open(&file, "0:1.txt", FA_OPEN_EXISTING | FA_READ); //打开文件
+//  if (res != FR_OK)
+//  	Beep(200);
+//  res = f_read(&file, buf, 512, &br);
+//  if (res != FR_OK)
+//  	Beep(200);
+//  res = f_lseek(&file, 1);			//指针指向第45个字节
+//  if (res != FR_OK)
+//  	Beep(200);
+//  res = f_read(&file, buf, 512, &br);
+//  if (res != FR_OK)
+//  	Beep(200);
+//  res = f_lseek(&file, 2);			//指针指向第45个字节
+//  if (res != FR_OK)
+//  	Beep(200);
+//  res = f_read(&file, buf, 512, &br);
+//  if (res != FR_OK)
+//  	Beep(200);
+
+
+//  i = SD_Initialize();
+//  if ( i != ok )
+//  {
+//  	Beep(500);
+//  }
+//  x = SD_GetSectorCount();//得到扇区数
+//  if (x == 0)
+//  {
+//  	Beep(500);
+//  }
+//  p = xmalloc(512);
+//  SD_ReadDisk(p,0,1);
+
+//  p = xmalloc(65536);
+//  for (x=0; x<65535; x++)
+//  {
+//  	testsram[x] = x;
+//  }
+//  w25q_write((INT8U *)testsram, 0, 65536);
+//  memset((void *)testsram, 0xFF, 65536 * 4);
+//  w25q_read(p, 0, 65536);
+//
+//  w25q_erase_sector(0);
+//  w25q_read((INT8U *)testsram, 0, 65536);
+//
+//  w25q_erase_block64(0);1
+//  w25q_read((INT8U *)testsram, 0, 65536);
+
+
